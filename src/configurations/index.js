@@ -78,4 +78,4 @@ const configurations = {
   },
 };
 
-export default configurations
+export default configurations;
