@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './App.css';
-import { configurations } from './configurations';
+import configurations from './configurations';
 import StopLight from './components/stoplight';
 
 const CONFIG_NAMES = {

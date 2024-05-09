@@ -1,4 +1,4 @@
-export const configurations = {
+const configurations = {
   standard: {
     lights: {
       red: {
@@ -77,3 +77,5 @@ export const configurations = {
     ],
   },
 };
+
+export default configurations
