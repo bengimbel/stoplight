@@ -7,7 +7,7 @@ const StopLight = ({ configuration }) => {
 
   const handleTimer = useCallback(() => {
   const obj = configuration.sequence?.find(item => item?.colors?.includes(activeLight))
-  
+
   return obj?.duration ?? 0
 
   }, [activeLight, configuration.sequence])
@@ -38,7 +38,7 @@ const StopLight = ({ configuration }) => {
     <div style={{width: "5rem", height: "auto", background: "#000000" }}>
       <div style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
         {isArray(lightList) && Object.values(lightList).map(item => (
-          <Light key={item.name} isActive={item.name === activeLight} name={item.color} />)
+          <Light key={item.name} isActive={item.name === activeLight} color={item.color} />)
         )}
       </div>
     </div>
