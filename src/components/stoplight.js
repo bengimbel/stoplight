@@ -1,45 +1,43 @@
 import { useState, useEffect, useCallback } from "react";
 import Light from "./light";
 
-const GREEN = "green"
-const RED = "red"
-const YELLOW = "yellow"
-const colorList = [GREEN, YELLOW, RED];
-
-const StopLight = () => {
-  const [activeLight, setActiveLight] = useState(colorList[0])
-
+const StopLight = ({configuration}) => {
+  const [lightList, setLightList] = useState([])
+  const [activeLight, setActiveLight] = useState(null)
+  
   const handleTimer = useCallback(() => {
-    switch(activeLight) {
-      case RED:
-        return 2000
-      case YELLOW:
-        return 1000
-      case GREEN:
-        return 5000
-      default:
-        return 5000
-    } 
-  }, [activeLight])
+  const obj = configuration.sequence.find(item => item.colors.includes(activeLight))
+    return obj?.duration
+
+  }, [activeLight, configuration.sequence])
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const index = (colorList.indexOf(activeLight) + 1) % colorList.length;
-      return setActiveLight(colorList[index])
+      const names = Object.values(lightList).map(item => item?.color)
+      const index = (names.indexOf(activeLight) + 1) % names.length;
+      return setActiveLight(names[index])
     }, handleTimer())
     return () => {
       clearInterval(interval);
     };
-  }, [activeLight, handleTimer]);
+  }, [activeLight, handleTimer, lightList]);
 
   const isActive = light => light === activeLight
+  
+  useEffect(() => {
+    if (lightList.length === 0) {
+      const list = Object.values(configuration.lights).sort((a, b) => a.position - b.position)
+      setLightList(list)
+    }
+
+  }, [configuration.lights, lightList])
 
   return (
     <div style={{width: "5rem", height: "auto", background: "#000000" }}>
       <div style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
-        <Light isActive={isActive(RED)} name={RED}/>
-        <Light isActive={isActive(YELLOW)} name={YELLOW}/>
-        <Light isActive={isActive(GREEN)} name={GREEN}/>
+        {lightList.length > 0 && Array.isArray(lightList) && Object.values(lightList).map(item => (
+          <Light key={item.color} isActive={isActive(item.color)} name={item.color} />)
+        )}
       </div>
     </div>
   )
